@@ -1,0 +1,70 @@
+{% load staticfiles %}
+{% load bootstrap %}
+<!DOCTYPE html>
+<html>
+<head>
+<link href="{% static 'bootstrap/css/3bootstrap.css' %}" rel="stylesheet" media="screen">
+<style type="text/css">
+#b {
+  background-image: url('{% static 'images/background.jpg' %}')
+}
+</style>
+</head>
+<body id="b">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'index' %}">Game Deals Tracker</a>
+        </div>
+        <div class="navbar-collapse collapse" style="height: 1px;">
+          <ul class="nav navbar-nav">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'all' %}">All Games</a></li>
+            <li><a href="{% url 'deals' %}">Deals</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome {{ user.username }}!<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                	<li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
+          			</ul>
+                        {% else %}
+                </li>      
+                {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+<div class="container">
+	<div class="row">
+	<div class="jumbotron">
+		{% if form.errors %}		
+			<div class="alert alert-danger"><p>Your username and password didn't match. Please try again.</p></div>
+		{% endif %}
+		<form method="post" action="{% url 'django.contrib.auth.views.login' %}?next={{ next }}" role="form">
+		{% csrf_token %}
+		{{ form|bootstrap }}
+		<div class="form-group">
+		<input type="submit" class="btn btn-primary btn-lg" />
+		<input type="hidden" name="next" value="/games/" />
+		</div>
+		</form>
+	</div>
+	</div>
+</div>
+<script src="{% static 'bootstrap/js/jquery.js'%}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+</body>
+</html>

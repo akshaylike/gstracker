@@ -1,0 +1,163 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<link href="{% static 'bootstrap/css/3bootstrap.css' %}" rel="stylesheet" media="screen">
+<!-- <link href="{% static 'bootstrap/css/bootstrap-theme.css' %}" rel="stylesheet" media="screen"> -->
+<style type="text/css">
+#b {
+  background-image: url('{% static 'images/background.jpg' %}')
+}
+</style>
+</head>
+<body id="b">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'index' %}">Game Deals Tracker</a>
+        </div>
+        <div class="navbar-collapse collapse" style="height: 1px;">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'all' %}">All Games</a></li>
+            <li><a href="{% url 'deals' %}">Deals</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+            <li><a href="{% url 'django.contrib.auth.views.login' %}">Login</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome {{ user.username }}!<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                	<li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
+          			</ul>
+                        {% else %}
+                </li>      
+                {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+<div class="row">
+<div class="jumbotron">
+   <p>Welcome to game deals tracker. You can now buy your favorite games for the cheapest prices!</p>
+	<div class="row">
+	<div class="col-md-4">        
+        <div class="panel panel-default" style="width:725px;height:340px;">
+        
+        <div id="carousel-games" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+                <li data-target="#carousel-games" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-games" data-slide-to="1"></li>
+                <li data-target="#carousel-games" data-slide-to="2"></li>
+                <li data-target="#carousel-games" data-slide-to="3"></li>
+                <li data-target="#carousel-games" data-slide-to="4"></li>
+                <li data-target="#carousel-games" data-slide-to="5"></li>
+                <li data-target="#carousel-games" data-slide-to="6"></li>
+                <li data-target="#carousel-games" data-slide-to="7"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+                <div class="item active">
+                        <img src="{% static 'images/Bethsoft_Dishonored_724x334.jpg' %}" alt="..." />
+                </div>
+                <div class="item">
+                        <img src="{% static 'images/Thief V3 724x340.png' %}" alt="..." />
+                </div>
+                <div class="item">
+                        <img src="{% static 'images/champ_carousel_get.png' %}" alt="..." />
+                </div>
+                <div class="item">
+                        <img src="{% static 'images/Alien Isolation 724 x 340.png' %}" alt="..." />
+                </div>
+                <div class="item">
+                        <img src="{% static 'images/GG-TombRaider-724.jpg' %}" alt="..." />
+                </div>
+                <div class="item">
+                        <img src="{% static 'images/WatchDogs 724 x 334.png' %}" alt="..." />
+                </div>
+                <div class="item">
+                        <img src="{% static 'images/Total War Sale 724 x 334.png' %}" alt="..." />
+                </div>
+                <div class="item">
+                        <img src="{% static 'images/The Elder Scrolls Online V3 724 x 334.png' %}" alt="..." />
+                </div>
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-games" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carousel-games" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+        </div>
+        </div>
+        </div>
+ 
+   <br/> 			
+  	</div>
+  	</div>
+
+</div>
+
+</div>
+      
+
+<div class="container">
+
+                
+                <div class="row">  
+                {% if games_list %}
+                {% for game in games_list %}  
+                <div class="col-md-3">
+                        
+                                <div class="panel panel-default">
+                                        <div>
+                                                <h5 class="text-center"><b>{{ game.game_title }}</h5>
+                                        </div>
+                                        <div class="panel-body text-center">
+                                                   <div>
+                                                        <img src="{% static 'images/' %}{{ game.pic }}" class="img-rounded">&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <a href="{{  game.game_link }}" target="_blank"><button type="button" class="btn btn-primary">&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart"></span>Buy&nbsp;&nbsp;</button></a>
+                                                   </div>     
+                                                        <ul class="nav nav-pills">
+                                                                <li><strike><h4><span class="label label-danger">${{ game.rrp }}</span></h4></strike></li>
+                                                                <li><h4><span class="label label-success">${{ game.drp }}</span></h4></li>
+                                                                <li><h4><span class="label label-primary">{{ game.discount }}% OFF</span></h4></li>
+                                                        </ul>
+                                                
+                                        </div>
+                                 </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                </div>
+        
+
+</div>
+
+</div>
+
+<script src="{% static 'bootstrap/js/jquery.js'%}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+<script>
+        $('.carousel').carousel({
+                interval: 1500
+        });
+</script>
+</body>
+</html>

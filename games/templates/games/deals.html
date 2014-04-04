@@ -1,0 +1,113 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<link href="{% static 'bootstrap/css/3bootstrap.css' %}" rel="stylesheet" media="screen">
+<style type="text/css">
+#b {
+  background-image: url('{% static 'images/background.jpg' %}')
+}
+</style>
+</head>
+<body id="b">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{% url 'index' %}">Game Deals Tracker</a>
+        </div>
+        <div class="navbar-collapse collapse" style="height: 1px;">
+          <ul class="nav navbar-nav">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'all' %}">All Games</a></li>
+            <li class="active"><a href="{% url 'deals' %}">Deals</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+            <li><a href="{% url 'django.contrib.auth.views.login' %}">Login</a></li>
+          </ul>
+         <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome {{ user.username }}!<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                	<li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
+          			</ul>
+                        {% else %}
+                </li>      
+                {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <div class="container">
+      <div class="row">
+      <div class="col-lg-8">
+        <div class="panel panel-default">
+            <input type="search" id="search" value="" class="form-control" placeholder="Search using Fuzzy searching">
+        </div>
+      </div>
+      </div>
+        <div class="panel panel-default">
+                <table class="table table-hover" id="table_search">
+                        <thead class="bg-primary">
+				<tr>
+					<th>Game Title</th>
+					<th>Retail Price</th>
+					<th>Discounted Price</th>
+					<th>Discount %</th>
+					<th>Link</th>
+				</tr>
+			</thead>
+			{% for d in deals_list %}
+			<tbody>
+			{% if d.discount >= 50 %}
+			        <tr>
+			                <td>{{ d.game_title }}</td>
+			                <td>${{ d.rrp }}</td>
+			                <td>${{ d.drp }}</td>
+			                <td><span class="label label-danger">{{ d.discount }}% OFF</span></td>
+			                <td><a href="{{  d.game_link }}" target="_blank"><button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-shopping-cart"></span>Buy</button></a></td>
+			        </tr>
+			{% elif d.discount >= 20 %}
+			        <tr>
+			                <td>{{ d.game_title }}</td>
+			                <td>${{ d.rrp }}</td>
+			                <td>${{ d.drp }}</td>
+			                <td><span class="label label-success">{{ d.discount }}% OFF</span></td>
+			                <td><a href="{{  d.game_link }}" target="_blank"><button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-shopping-cart"></span>Buy</button></a></td>
+			        </tr>
+			{% else %}
+			        <tr>
+			                <td>{{ d.game_title }}</td>
+			                <td>${{ d.rrp }}</td>
+			                <td>${{ d.drp }}</td>
+			                <td><span class="label label-primary">{{ d.discount }}% OFF</span></td>
+			                <td><a href="{{  d.game_link }}" target="_blank"><button type="button" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-shopping-cart"></span>Buy</button></a></td>
+			        </tr>
+			{% endif %}
+			{% endfor %}
+			</tbody>
+                </table>
+        </div>
+      </div>
+<script src="{% static 'bootstrap/js/jquery.js'%}"></script>
+<script src="//rawgithub.com/stidges/jquery-searchable/master/dist/jquery.searchable-1.0.0.min.js"></script>
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+<script>
+$( '#table_search' ).searchable({
+        striped: true,
+        oddRow: { 'background-color': '#f5f5f5' },
+        evenRow: { 'background-color': '#fff' },
+        searchType: 'fuzzy'
+    });
+</script>
+</body>
+</html>
